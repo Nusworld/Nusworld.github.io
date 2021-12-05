@@ -156,15 +156,15 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <h2 id="Java线程学习小记录"><a href="#Java线程学习小记录" class="headerlink" title="Java线程学习小记录"></a>Java线程学习小记录</h2><ol>
+                <h1 id="Java线程学习小记录"><a href="#Java线程学习小记录" class="headerlink" title="Java线程学习小记录"></a>Java线程学习小记录</h1><ol>
 <li>传递中断    在Interrupt线程时，线程抛出异常，但是在处理异常时应该在线程的顶层方法中处理异常即进行try catch, 而在较低的层次不要使用try catch来“吞掉”异常，应该使用函数签名处理，即 throws 相关Exception</li>
 <li>恢复中断    如果不使用throws 可以在catch语句中重新设置interrupt标记，以便后续处理检测到刚刚发生了中断</li>
 <li>interruped() 该静态方法只关心运行它的线程，在返回线程状态后，重新设置标志位为false 而isInterrupted() 方法不是静态方法，返回的是对应线程实例的状体，且不会改变标志位</li>
 <li>线程的6种状态</li>
 </ol>
-<p><img src="/home/liuzehao/FILES/MyNotes.md/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0/pics/0.png"></p>
-<p><img src="/home/liuzehao/FILES/MyNotes.md/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0/pics/1.png"></p>
-<p><img src="/home/liuzehao/FILES/MyNotes.md/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0/pics/3.png"></p>
+<p><img src="./pics/0.png"></p>
+<p><img src="./pics/1.png"></p>
+<p><img src="./pics/3.png"></p>
 <ol start="5">
 <li>try catch 只能捕获本线程的异常，无法捕获子线程的异常</li>
 </ol>
