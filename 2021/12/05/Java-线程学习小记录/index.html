@@ -148,7 +148,159 @@
 <p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/1.png"></p>
 <p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/3.png"></p>
 <ol start="5">
-<li>try catch 只能捕获本线程的异常，无法捕获子线程的异常</li>
+<li><p>try catch 只能捕获本线程的异常，无法捕获子线程的异常</p>
+</li>
+<li><p>JVM内存结构，Java内存模型，Java对象模型</p>
+<ol>
+<li><p>JVM 内存结构</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/4.png"></p>
+</li>
+<li><p>Java对象模型</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/5.png"></p>
+</li>
+<li><p>JMM (Java Memory Model JAVA内存模型)  </p>
+<p>java内存模型是一种规范，（C语言中不存在内存模型的概念，即程序的运行结果依赖于具体平台的实现，即无法保证并发结果的可预期）</p>
+<p>java内存模型是工具类和关键字的原理</p>
+<p>重点：</p>
+<ul>
+<li><p>重排序</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/6.png"></p>
+</li>
+<li><p>可见性</p>
+<p>代码演示</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>ncu<span class="token punctuation">.</span>erlys<span class="token punctuation">.</span>liu<span class="token punctuation">.</span>jmm<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FieldVisibility</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            FieldVisibility test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FieldVisibility</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    <span class="token keyword">try</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+                    test<span class="token punctuation">.</span><span class="token function">change</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+            <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    <span class="token keyword">try</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+                    test<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"b = "</span> <span class="token operator">+</span> b <span class="token operator">+</span> <span class="token string">" a = "</span> <span class="token operator">+</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">change</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+        b <span class="token operator">=</span> a<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<p>运行结果可能存在的情况</p>
+<table>
+<thead>
+<tr>
+<th>结果</th>
+<th>结果描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>b = 3 a = 3</td>
+<td>线程一先全部执行完，线程二后执行完</td>
+</tr>
+<tr>
+<td>b = 2 a = 1</td>
+<td>线程二先全部执行完，线程一后执行完</td>
+</tr>
+<tr>
+<td>b = 2 a = 3</td>
+<td>线程一执行完a的修改，后线程二执行</td>
+</tr>
+<tr>
+<td>b = 3 a = 1</td>
+<td>可见性问题发生，线程二只能看见线程一的部分修改</td>
+</tr>
+</tbody></table>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/7.png"></p>
+<p>问题解决：使用volatile关键字</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">volatile</span> <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword">volatile</span> <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/8.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/9.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/10.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/11.png"></p>
+<p>​    happens-before:</p>
+<p>​    <img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/11.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/13.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/14.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/15.png"></p>
+<ol>
+<li><p>单线程原则</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/16.png"></p>
+</li>
+<li><p>锁操作</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/17.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/18.png"></p>
+</li>
+<li><p>volatile 变量</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/19.png"></p>
+</li>
+<li><p>线程启动</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/20.png"></p>
+<p>即子线程启动之后，主线程中在子线程启动之前的动作对于子线程来说是可见的。</p>
+</li>
+<li><p>线程join</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/21.png"></p>
+</li>
+<li><p>传递性：如果hb(A,B)而且hb(B,C), 那么可以推出hb(A,C)</p>
+</li>
+<li><p>中断：一个线程被其他线程interrupt时，那么检测中断(isiterrupted)或者</p>
+<p>抛出InterruptedException一定能看到</p>
+</li>
+<li><p>构造方法：对象构造方法的最后一条指令happens-before于finalize()方法</p>
+<p>的第一行指令(了解即可)</p>
+</li>
+<li><p>工具类的Happens-Before原则</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/22.png"></p>
+<p>注意：volatile 保证该变量写操作之前的的操作被其他线程可见</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">volatile</span> <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">change</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+        b <span class="token operator">=</span> a<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<p>上述代码中b保证在写入之后的值能被读取操作读取，而在同一线程中，a的赋值发生在b之前，则a一定被赋值，即b之前的操作也能对其他线程可见</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/23.png"></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
 </ol>
 
             </div>
