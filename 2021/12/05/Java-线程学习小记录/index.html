@@ -138,7 +138,8 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <h1 id="Java线程学习小记录"><a href="#Java线程学习小记录" class="headerlink" title="Java线程学习小记录"></a>Java线程学习小记录</h1><ol>
+                <h1 id="Java线程学习小记录"><a href="#Java线程学习小记录" class="headerlink" title="Java线程学习小记录"></a>Java线程学习小记录</h1><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/Nusworld/jthreal">https://github.com/Nusworld/jthreal</a></p>
+<ol>
 <li>传递中断    在Interrupt线程时，线程抛出异常，但是在处理异常时应该在线程的顶层方法中处理异常即进行try catch, 而在较低的层次不要使用try catch来“吞掉”异常，应该使用函数签名处理，即 throws 相关Exception</li>
 <li>恢复中断    如果不使用throws 可以在catch语句中重新设置interrupt标记，以便后续处理检测到刚刚发生了中断</li>
 <li>interruped() 该静态方法只关心运行它的线程，在返回线程状态后，重新设置标志位为false 而isInterrupted() 方法不是静态方法，返回的是对应线程实例的状体，且不会改变标志位</li>
@@ -240,7 +241,37 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">   <span class="keyword">volatile</span> <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       a = <span class="number">3</span>;</span><br><span class="line">       b = a;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 <p>上述代码中b保证在写入之后的值能被读取操作读取，而在同一线程中，a的赋值发生在b之前，则a一定被赋值，即b之前的操作也能对其他线程可见</p>
-<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/23.png"></p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/23.png">volatile关键字</p>
+<p>   与可见性与禁止重排序相关</p>
+<p>   <img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/24.png"></p>
+<p>   <img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/25.png"></p>
+<p>   <img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/26.png"></p>
+<p>   <img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/27.png"></p>
+<ol start="11">
+<li><p>原子性</p>
+<ol>
+<li><p>什么是原子性</p>
+<p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/28.png"></p>
+</li>
+<li><p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/29.png"></p>
+</li>
+<li><p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/30.png"></p>
+<p>实际开发中已经考虑此问题，即long和double写入可以看作原子操作</p>
+</li>
+<li><p>单例模式</p>
+<ol>
+<li><p>8种写法，面试时推荐双重检查模式(具体看代码仓库,此处只列出重要的两种方法)</p>
+</li>
+<li><p><img src="https://myblogliu.oss-cn-beijing.aliyuncs.com/31.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码实例 双重检查模式</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 双重检查 (推荐面试使用)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton6</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton6 INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton6</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton6 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (INSTANCE == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 不同线程拿到锁之后仍然会多次创建实例</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton6.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (INSTANCE == <span class="keyword">null</span>)</span><br><span class="line">                    INSTANCE = <span class="keyword">new</span> Singleton6();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>使用枚举实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 枚举 (推荐使用)</span></span><br><span class="line"><span class="comment"> * 最终编译后，enum实际也是类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Singleton8</span> </span>&#123;</span><br><span class="line">   INSTANCE;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">whatever</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*使用时 Singleton8.INSTANCE.whatever();</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>​                            </p>
 </li>
 </ol>
 </li>
